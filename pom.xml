@@ -9,8 +9,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <nd4j.version>0.0.3.5.4</nd4j.version>
-        <dl4j.version>0.0.3.2.7</dl4j.version>
+        <nd4j.version>0.0.3.5.5.3-SNAPSHOT</nd4j.version>
+        <dl4j.version>0.0.3.3.3.alpha1-SNAPSHOT</dl4j.version>
+        <nd4j-cuda.version>6.5</nd4j-cuda.version>
     </properties>
 
     <build>
@@ -19,8 +20,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -31,21 +32,43 @@
             <artifactId>deeplearning4j-core</artifactId>
             <version>${dl4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-nlp</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-api</artifactId>
+            <version>${nd4j.version}</version>
+        </dependency>
+
+
         <!--<dependency>-->
-            <!--<groupId>org.deeplearning4j</groupId>-->
-            <!--<artifactId>deeplearning4j-nlp</artifactId>-->
-            <!--<version>${dl4j.version}</version>-->
+            <!--<groupId>org.nd4j</groupId>-->
+            <!--<artifactId>jcuda</artifactId>-->
+            <!--<version>${nd4j-cuda.version}</version>-->
+            <!--<scope>runtime</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>org.nd4j</groupId>-->
-            <!--<artifactId>nd4j-api</artifactId>-->
+            <!--<artifactId>nd4j-jcublas-osx-6.5</artifactId>-->
             <!--<version>${nd4j.version}</version>-->
+            <!--<scope>runtime</scope>-->
         <!--</dependency>-->
+
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-jblas</artifactId>
             <version>${nd4j.version}</version>
-            <scope>runtime</scope>
+            <!--<scope>runtime</scope>-->
         </dependency>
+        <dependency>
+            <groupId>org.jblas</groupId>
+            <artifactId>jblas</artifactId>
+            <version>1.2.3</version>
+            <!--<scope>runtime</scope>-->
+        </dependency>
+
     </dependencies>
 </project>
