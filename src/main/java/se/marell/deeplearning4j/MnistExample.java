@@ -36,8 +36,8 @@ public class MnistExample {
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .weightInit(WeightInit.DISTRIBUTION)
 //                .momentum(5e-1f)
-                .iterations(1000)
-                .render(1)
+//                .iterations(100)
+                //.render(1)
                 .layerFactory(l)
                 .lossFunction(LossFunctions.LossFunction.RMSE_XENT)
                 .rng(gen)
@@ -62,24 +62,19 @@ public class MnistExample {
 
         MultiLayerNetwork network = new MultiLayerNetwork(conf);
 
-        DataSetIterator dataSetIter = new MultipleEpochsIterator(1, new MnistDataSetIterator(10, 100));
+        DataSetIterator dataSetIter = new MultipleEpochsIterator(10, new MnistDataSetIterator(1000, 10001));
         System.out.println("### calling fit");
         network.fit(dataSetIter);
         System.out.println("### fit returned");
 
         dataSetIter.reset();
-        // Dimensionality reduced matrix
-        DataSet dataSet = dataSetIter.next();
-        INDArray output = network.output(dataSet.getFeatureMatrix());
-        INDArray labels = dataSet.getLabels();
-
-        System.out.println("### evaluating result");
-
         Evaluation eval = new Evaluation();
-        eval.eval(labels, output);
+        while(dataSetIter.hasNext()) {
+            DataSet d2 = dataSetIter.next();
+            INDArray predict2 = network.output(d2.getFeatureMatrix());
+            eval.eval(d2.getLabels(), predict2);
+        }
         log.info(eval.stats());
-        int[] predict = network.predict(dataSet.getFeatureMatrix());
-        log.info("Predict " + Arrays.toString(predict));
     }
 }
 
