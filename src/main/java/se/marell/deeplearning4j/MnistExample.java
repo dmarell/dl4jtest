@@ -62,7 +62,7 @@ public class MnistExample {
 
         MultiLayerNetwork network = new MultiLayerNetwork(conf);
 
-        DataSetIterator dataSetIter = new MultipleEpochsIterator(10, new MnistDataSetIterator(1000, 10001));
+        DataSetIterator dataSetIter = new MultipleEpochsIterator(1, new MnistDataSetIterator(1000, 10001));
         System.out.println("### calling fit");
         network.fit(dataSetIter);
         System.out.println("### fit returned");

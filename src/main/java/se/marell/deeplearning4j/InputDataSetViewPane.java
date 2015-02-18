@@ -18,7 +18,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 
 public class InputDataSetViewPane {
-    private Node result;
+    private ScrollPane scrollPane;
 
     public InputDataSetViewPane(DataSetIterator dataSetIter, int columns) {
         GridPane grid = new GridPane();
@@ -39,10 +39,9 @@ public class InputDataSetViewPane {
                 ++row;
             }
         }
-        ScrollPane sp = new ScrollPane();
-        sp.setContent(grid);
-        sp.getStyleClass().add("input-scroll-pane");
-        result = sp;
+        scrollPane = new ScrollPane();
+        scrollPane.setContent(grid);
+        scrollPane.getStyleClass().add("input-scroll-pane");
     }
 
     private Node createCell(DataSet ds) {
@@ -92,6 +91,6 @@ public class InputDataSetViewPane {
     }
 
     public Node getNode() {
-        return result;
+        return scrollPane;
     }
 }
