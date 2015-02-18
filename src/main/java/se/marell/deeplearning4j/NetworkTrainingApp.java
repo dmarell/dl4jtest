@@ -28,7 +28,9 @@ public class NetworkTrainingApp extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         final TrainingSetup trainingSetup = new TrainingSetup(
-                dsMap -> Platform.runLater(() -> trainingDataSetView.addResult(dsMap)));
+                dsMap ->
+                Platform.runLater(() -> trainingDataSetView.addResult(dsMap)
+        ));
 
         trainingDataSetView = new TrainingDataSetViewPane(trainingSetup.getInputLabels()).build();
 

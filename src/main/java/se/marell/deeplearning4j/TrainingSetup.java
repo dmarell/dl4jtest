@@ -43,7 +43,7 @@ public class TrainingSetup {
         Thread t = new Thread(() -> {
             while (true) {
                 Map<String, DataSet> morphedMsMap = morphDsMap(dsMap);
-                listener.dataSetUpdated(dsMap);
+                listener.dataSetUpdated(morphedMsMap);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignore) {
@@ -58,13 +58,26 @@ public class TrainingSetup {
         for (String label : inputLabels) {
             result.put(label, null);
         }
+        inputDataSetIterator.reset();
         while (inputDataSetIterator.hasNext()) {
             DataSet ds = inputDataSetIterator.next();
             String s = DL4jUtil.getLabel(inputLabels, ds.getLabels());
-            //TODO
+            result.put(s, ds);
+            if (allBucketsInitialized(result)) {
+                break;
+            }
         }
         inputDataSetIterator.reset();
-        return null;
+        return result;
+    }
+
+    private boolean allBucketsInitialized(Map<String, DataSet> result) {
+        for (DataSet ds : result.values()) {
+            if (ds == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Map<String, DataSet> morphDsMap(Map<String, DataSet> dsMap) {

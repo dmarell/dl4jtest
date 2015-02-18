@@ -35,7 +35,7 @@ public class TrainingDataSetViewPane {
 
         scrollPane = new ScrollPane();
         scrollPane.setContent(grid);
-        scrollPane.getStyleClass().add("train-scroll-pane");
+        scrollPane.getStyleClass().add("training-scroll-pane");
     }
 
     public void addResult(Map<String, DataSet> dsMap) {
@@ -57,7 +57,7 @@ public class TrainingDataSetViewPane {
 
     private Node createLabel(String label) {
         Text text = new Text(label);
-        text.getStyleClass().add("train-label");
+        text.getStyleClass().add("training-label");
         return text;
     }
 

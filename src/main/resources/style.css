@@ -7,6 +7,15 @@
     -fx-min-height: 300px;
 }
 
+.training-scroll-pane {
+    -fx-min-width: 400px;
+    -fx-min-height: 300px;
+}
+
+
+
+
+
 .sliders-pane {
     -fx-border-radius: 10px;
     -fx-border-insets: 5px;
