@@ -13,8 +13,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import org.nd4j.linalg.dataset.DataSet;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class NetworkTrainingApp extends Application {
     private static final int IMAGE_COLS = 20;
@@ -26,15 +29,13 @@ public class NetworkTrainingApp extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        final TrainingSetup trainingSetup = new TrainingSetup(
-                dsMap ->
-                Platform.runLater(() -> trainingDataSetView.addResult(dsMap)
-        ));
+    public void start(Stage stage) throws IOException {
+        TrainingSetup trainingSetup = new TrainingSetup((text, dsMap) ->
+                Platform.runLater(() -> trainingDataSetView.addResult(text, dsMap)));
 
         trainingDataSetView = new TrainingDataSetViewPane(trainingSetup.getInputLabels()).build();
 
-        primaryStage.setTitle("NetworkTrainingApp");
+        stage.setTitle("NetworkTrainingApp");
 
         HBox buttonBox = new HBox();
         buttonBox.getStyleClass().add("button-pane");
@@ -53,9 +54,11 @@ public class NetworkTrainingApp extends Application {
         setEnableState();
 
         Scene scene = new Scene(mainPane);
-        primaryStage.setScene(scene);
+        stage.setScene(scene);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-        primaryStage.show();
+        stage.show();
+
+        stage.setOnCloseRequest(we -> trainingSetup.stop());
     }
 
     private Node createCenterPane(TrainingSetup trainingSetup) throws IOException {

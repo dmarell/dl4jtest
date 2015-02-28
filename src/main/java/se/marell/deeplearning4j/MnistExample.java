@@ -18,7 +18,6 @@ import org.deeplearning4j.nn.conf.override.ConfOverride;
 import org.deeplearning4j.nn.layers.factory.LayerFactories;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
-import org.nd4j.linalg.api.activation.Activations;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
@@ -35,25 +34,26 @@ public class MnistExample {
         LayerFactory l = LayerFactories.getFactory(RBM.class);
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .weightInit(WeightInit.DISTRIBUTION)
-//                .momentum(5e-1f)
-//                .iterations(100)
+                .momentum(5e-1f)
+                .iterations(1000)
                 //.render(1)
                 .layerFactory(l)
-                .lossFunction(LossFunctions.LossFunction.RMSE_XENT)
+                .lossFunction(LossFunctions.LossFunction.RECONSTRUCTION_CROSSENTROPY)
                 .rng(gen)
                 .optimizationAlgo(OptimizationAlgorithm.ITERATION_GRADIENT_DESCENT)
                 .learningRate(1e-1f)
                 .nIn(784)
                 .nOut(10)
-                .list(3)
-                .hiddenLayerSizes(new int[]{500, 100})
+                .list(4)
+                .hiddenLayerSizes(new int[]{500, 250, 100})
                 .override(new ConfOverride() {
                     @Override
                     public void overrideLayer(int i, NeuralNetConfiguration.Builder builder) {
                         if (i == 3) {
                             builder.weightInit(WeightInit.ZERO);
-                            builder.activationFunction(Activations.softMaxRows());
+                            //builder.activationFunction(Activations.softMaxRows());
                             builder.lossFunction(LossFunctions.LossFunction.MCXENT);
+                            System.out.println("### overrideLayer");
                         }
                     }
                 })

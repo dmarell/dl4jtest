@@ -33,18 +33,19 @@ public class TrainingDataSetViewPane {
         grid.setVgap(3);
         grid.setPadding(new Insets(0, 3, 0, 3));
 
+        int col = 1;
+        for (String label : labels) {
+            grid.add(createLabel(label), col++, 0);
+        }
+
         scrollPane = new ScrollPane();
         scrollPane.setContent(grid);
         scrollPane.getStyleClass().add("training-scroll-pane");
     }
 
-    public void addResult(Map<String, DataSet> dsMap) {
-        int col = 0;
-        for (String label : dsMap.keySet()) {
-            grid.add(createLabel(label), ++col, 0);
-        }
-
-        col = 0;
+    public void addResult(String text, Map<String, DataSet> dsMap) {
+        grid.add(new Text(text), 0, rowCount + 1);
+        int col = 1;
         for (String label : labels) {
             DataSet ds = dsMap.get(label);
             if (ds != null) {

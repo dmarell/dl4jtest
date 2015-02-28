@@ -5,6 +5,7 @@ package se.marell.deeplearning4j;
 
 import org.deeplearning4j.datasets.iterator.DataSetIterator;
 import org.deeplearning4j.datasets.iterator.impl.MnistDataSetIterator;
+import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 
 import java.io.IOException;
@@ -17,13 +18,13 @@ public class TrainingSetup {
     private static final int NUM_INPUTS = 1000;
 
     public interface Listener {
-        void dataSetUpdated(Map<String, DataSet> dsMap);
+        void dataSetUpdated(String text, Map<String, DataSet> dsMap);
     }
 
     private Listener listener;
     private List<String> inputLabels = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
     private DataSetIterator inputDataSetIterator;
-//    private DataSetIterator trainingDataSetIterator;
+    private Thread thread;
 
     public TrainingSetup(Listener listener) throws IOException {
         this.listener = listener;
@@ -38,19 +39,25 @@ public class TrainingSetup {
         return inputLabels;
     }
 
+    public void stop() {
+        thread.interrupt();
+    }
+
     public void start() {
         final Map<String, DataSet> dsMap = createDsMap();
-        Thread t = new Thread(() -> {
+        thread = new Thread(() -> {
+            int n = 0;
             while (true) {
-                Map<String, DataSet> morphedMsMap = morphDsMap(dsMap);
-                listener.dataSetUpdated(morphedMsMap);
+                Map<String, DataSet> morphedDsMap = morphDsMap(dsMap);
+                listener.dataSetUpdated("" + n++, morphedDsMap);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignore) {
+                    return;
                 }
             }
         });
-        t.start();
+        thread.start();
     }
 
     private Map<String, DataSet> createDsMap() {
@@ -81,6 +88,14 @@ public class TrainingSetup {
     }
 
     private Map<String, DataSet> morphDsMap(Map<String, DataSet> dsMap) {
+        for (DataSet ds : dsMap.values()) {
+            morphDataSet(ds);
+        }
         return dsMap;
+    }
+
+    private void morphDataSet(DataSet ds) {
+        INDArray features = ds.getFeatures();
+        //TODO ds.setFeatures(features.add(1));
     }
 }
